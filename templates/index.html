@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Unlimited Movies, TV Shows, and More</h1>
+    <p>Enter a movie name to search for matching movies</p>
+    
+    <!-- Movie Search Form -->
+    <form method="POST" action="/recommend">
+        <!-- Movie Name Input -->
+        <input 
+            type="text" 
+            name="movie_name" 
+            placeholder="Type movie name here..." 
+            required 
+            list="movie_list" 
+            value="{{ search_query }}"> <!-- Retain search query -->
+        
+        <datalist id="movie_list">
+            {% for movie in movie_list %}
+            <option value="{{ movie }}">
+            {% endfor %}
+        </datalist>
+        
+        <!-- Rating Filter -->
+        <label for="rating" style="display: block; margin-top: 10px;">Select Minimum Rating:</label>
+        <select name="rating" id="rating" style="padding: 10px; font-size: 1em; border-radius: 5px; background-color: #333; color: white; border: 1px solid #444;">
+            <option value="0" {% if rating_filter == 0 %}selected{% endif %}>All Ratings</option>
+            <option value="5" {% if rating_filter == 5 %}selected{% endif %}>5+</option>
+            <option value="6" {% if rating_filter == 6 %}selected{% endif %}>6+</option>
+            <option value="7" {% if rating_filter == 7 %}selected{% endif %}>7+</option>
+            <option value="8" {% if rating_filter == 8 %}selected{% endif %}>8+</option>
+            <option value="9" {% if rating_filter == 9 %}selected{% endif %}>9+</option>
+        </select>
+
+        <!-- Submit Button -->
+        <button type="submit" style="margin-top: 10px;">Search Movies</button>
+    </form>
+</div>
+
+       <h2>Search Results</h2> <!-- Move this here, before the movie results -->
+<div class="movies">
+    {% if recommendations %}
+        {% for movie in recommendations %}
+        <div class="movie">
+            <a href="https://google.com/search?q={{ movie['title'] | replace(' ', '+') }}" target="_blank">
+                <img src="https://via.placeholder.com/150x225?text={{ movie['title'] }}" alt="{{ movie['title'] }}">
+                <p>{{ movie['title'] }}</p>
+                <p>Rating: {{ movie['vote_average'] }}</p>
+            </a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No matching movies found. Try searching for something else.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Documents</h1>
+<p>Click on a file to view it directly</p>
+<div>
+    {% for file in files %}
+    <h3><a href="/doc/{{ file }}" target="pdf_frame">{{ file }}</a></h3>
+    {% endfor %}
+</div>
+
+<iframe id="pdf_frame" name="pdf_frame" src="" type="application/pdf"></iframe>
+{% endblock %}
+
